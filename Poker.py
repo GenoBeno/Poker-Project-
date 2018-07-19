@@ -16,7 +16,9 @@ Turn1Location = (0, 0)
 Turn2Location = (0, 0)
 Hand1Location = (0, 0)
 Hand2Location = (0, 0)
-numPlayers = 0
+numPlayers = '0'
+playerNum = '0'
+
 player1, player2, player3, player4, player5 = "", "", "", "", ""
 
 
@@ -46,87 +48,73 @@ class Poker():
                 if event.type == pygame.QUIT: 
                     running = False
                
-            self.last = pygame.time.get_ticks()
             displayText("Welcome to Poker", (screen.get_width()/2, screen.get_height()/2), screen, 80)
             displayText("Waiting for Players...", (screen.get_width()/2, screen.get_height()/2 + 50), screen, 80)
             
             pygame.display.update()
 
-            # now = pygame.time.get_ticks()
-            # while now - self.last <= 3000:
-            #     now = pygame.time.get_ticks()
             
-            print('hello boi')
 
             #Code to connect players
             s = socket.socket()
             port = 20000
-            host = socket.gethostbyname(socket.gethostname())
-            s.bind((host,port))
-            s.listen(5)
-            connectors = []
+            s.connect(('137.112.223.68', port)) #Maxwell is currently hosting
+            #'137.112.223.68' - Maxwell's IP
+            #'137.112.224.150' - Dhiraj's IP
+            string = int(s.recv(1024))
 
-            previous = pygame.time.get_ticks()
-            current = pygame.time.get_ticks()
-            print("------WORK pls---------")
+            playerNum = string % 10
+            numPlayers = string // 10
+            # numPlayers = string[:-2]
+            # playerNum = string[-1:]
+            # print(numPlayers)
+            # print(playerNum)
+            # while True:
+            # playerNum = int(s.recv(1024))
+                # break
+            # print(str(numPlayers) + "gey")
+            # print(str(playerNum) + " IM AKSJDFKLAJSDF")
+            # pygame.display.update()
+            # # print("displayed player number")
             
-            s.settimeout(10)
-            while True:
-                try:
-                    c, addr = s.accept()
-                    print('got connection from', addr)
 
-                    c.send('Tank you for connecting with your friendly neighborhood spiderman'.encode())
-                    message = (c.recv(1024))
-                    print (message)
-                    connectors.append(addr)
-                except socket.timeout as e:
-                    break
-            
-            
-            
-            # try:
-            #     if(current - previous <= 10000):
-            #         connectors.append(askForConnection(s))
-            #         current = pygame.time.get_ticks()
-            # except:
-            #     break
-            
-            # if(current - previous <= 10000):
-            #     connectors.append(askForConnection(s))
-            #     current = pygame.time.get_ticks()
-            # if(current - previous <= 10000):
-            #     print("On third guy and time is not up yet")
-            #     connectors.append(askForConnection(s))
-            #     current = pygame.time.get_ticks()
-            # if(current - previous <= 10000):
-            #     connectors.append(askForConnection(s))
-            #     current = pygame.time.get_ticks()
-            # if(current - previous <= 10000):
-            #     connectors.append(askForConnection(s))
-            #     current = pygame.time.get_ticks()   
-                    
-            
-            # s.close
-                
-
-                
-            #
-            #
-            numPlayers = len(connectors)
-
-            #Drawing rects for river and turn card positions
-            #
-            #
-            #
             screen.fill((34, 139, 34))
+            displayText("You are Player " + str(playerNum), (screen.get_width()-200, screen.get_height()-50), screen, 50)
+            pygame.display.update()
+            
+
+            # screen.fill((34, 139, 34))
+
+            #Drawing rects for flop, turn, river, and hand
+            pygame.draw.rect(screen,(0,0,0),[screen.get_width()-210,90,105,105], 5)
+            pygame.draw.rect(screen,(0,0,0),[screen.get_width()-375,90,105,105], 5)
+            pygame.draw.rect(screen,(0,0,0),[screen.get_width()-540,90,105,105], 5)
+            displayText("Flop",[screen.get_width()-323,40],screen, 60)
+            pygame.draw.line(screen, (255, 255, 255), (screen.get_width()-600, 75), (screen.get_width()-50, 75), 4)
+
+            pygame.draw.rect(screen, (0, 0, 0), [screen.get_width()-460, 280, 105, 105], 5)
+            pygame.draw.rect(screen, (0, 0, 0), [screen.get_width()-280, 280, 105, 105], 5)
+            displayText("Turn", [screen.get_width()-410, 250], screen, 60)
+
+            displayText("River", [screen.get_width()-230, 250], screen, 60)
+
+
+
+
+            
 
             #Drawing player avatars
-            player1 = Player("Player 1", 1000, (110, screen.get_height()/6), (130, screen.get_height()/6))
-            player2 = Player("Player 2", 1000, (110, 2*screen.get_height()/6), (130, 2*screen.get_height()/6))
-            player3 = Player("Player 3", 1000, (110, 3*screen.get_height()/6), (130, 3*screen.get_height()/6))
-            player4 = Player("Player 4", 1000, (110, 4*screen.get_height()/6), (130, 4*screen.get_height()/6))
-            player5 = Player("Player 5", 1000, (110, 5*screen.get_height()/6), (130, 5*screen.get_height()/6))
+            # player1 = Player("Player 1", 1000, (110, screen.get_height()/6), (130, screen.get_height()/6))
+            # player2 = Player("Player 2", 1000, (110, 2*screen.get_height()/6), (130, 2*screen.get_height()/6))
+            # player3 = Player("Player 3", 1000, (110, 3*screen.get_height()/6), (130, 3*screen.get_height()/6))
+            # player4 = Player("Player 4", 1000, (110, 4*screen.get_height()/6), (130, 4*screen.get_height()/6))
+            # player5 = Player("Player 5", 1000, (110, 5*screen.get_height()/6), (130, 5*screen.get_height()/6))
+
+            player1 = Player("Player 1", 1000, screen)
+            player2 = Player("Player 2", 1000, screen)
+            player3 = Player("Player 3", 1000, screen)
+            player4 = Player("Player 4", 1000, screen)
+            player5 = Player("Player 5", 1000, screen)
 
             player1Loc = (110, screen.get_height()/6)
             player2Loc = (110, 2*screen.get_height()/6)
@@ -149,6 +137,12 @@ class Poker():
             pygame.display.update()
             print("displaying image")
             
+            
+            # pygame.time.delay(5000)
+            # print("rarded")
+            # pygame.draw.rect(screen, (34, 139, 34), [screen.get_width()/2-500, screen.get_height()/2-100, 750, 300])
+            pygame.display.update()
+
             running = False
             
     def winnerCheck(self):
@@ -176,15 +170,8 @@ class Poker():
 
             pygame.display.update()
             clock.tick(100)
-        
-# def askForConnection(s):
-#         c, addr = s.accept()
-#         print('got connection from', addr)
 
-#         c.send('Tank you for connecting with your friendly neighborhood spiderman'.encode())
-#         message = (c.recv(1024))
-#         print (message)
-#         return addr
+    # def newRound(self, screen):
 
 
 def displayText(text, location, screen, fontSize):
@@ -204,7 +191,6 @@ def main():
     screen = pygame.display.set_mode((width, height))
     screen.fill((34, 139, 34))
     pygame.display.set_caption("Texas Hold-em Poker")
-
 
     startGame = False
 
