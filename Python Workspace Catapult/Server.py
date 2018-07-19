@@ -2,7 +2,8 @@ import pygame
 import time
 import socket
 
-pygame.init()
+
+# pygame.init()
 
 s = socket.socket()
 port = 20000
@@ -17,7 +18,7 @@ s.settimeout(10)
 while True:
     try:
         c, addr = s.accept()
-        print('got cnection from', addr)
+        print('got connection from', addr)
 
         # c.send('Tank you for connecting with your friendly neighborhood spiderman'.encode())
         # message = (c.recv(1024))
