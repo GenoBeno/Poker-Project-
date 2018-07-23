@@ -1,5 +1,5 @@
 import pygame
-import time
+from time import *
 import os
 import socket, pickle
 from Card import Card
@@ -159,40 +159,56 @@ class Poker():
             clock.tick(100)
 
     def newRound(self, screen):
-        # variable = Card()
-        # self.card1 = pickle.Unpickler.load(Card)
-        # self.card2 = pickle.Unpickler.load(Card)
-        
-        self.card1 = ""
+        self.cards = ""
         while True:
-            self.card1 = s.recv(1024)
-            self.card1 = pickle.loads(self.card1)
-            if not self.card1 == "":
-                print("got first card")
+            self.cards = s.recv(1024)
+            self.cards = pickle.loads(self.cards)
+            if not self.cards == "":
                 break
 
-        self.card2 = ""
-        
-        while True:
-            print("going thru second loop bois")
-            self.card2 = s.recv(1024)
-            print("received 2nd card")
-            self.card2 = pickle.loads(self.card2)
-            if not self.card2 == "":
-                print ("ha got second card")
-                break
-        # print("kmsasdf")
-        # self.card1 = str(s.recv(1024))
-        # print("kmslast")
-        
-        # print(str(self.card1))
-        # self.card2 = pickle.loads(s.recv(1024))
-        # print(self.card2)
+        # while True:
+        #     try:
+        #         self.cards = s.recv(64)
+        #         self.cards = pickle.loads(self.cards)
+        #     except EOFError:
+        #         break
+
+        self.card1 = self.cards[0]
+        self.card2 = self.cards[1]
+
+        print(self.card1)
+        print(self.card2)
+
         self.displayIMGNonCenter(self.Hand1Location, screen, self.card1.getImageAddress(), [100, 100])
         self.displayIMGNonCenter(self.Hand2Location, screen, self.card2.getImageAddress(), [100, 100])
-        
-        # self.card1.displayCardImage([screen.get_width()/2, screen.get_height()/2], screen)
-        # self.card2.displayCardImage([screen.get_width()/2, screen.get_height()/2], screen)
+        sleep(1)
+
+        ja = s.recv(4000000)
+
+        myFile = open("D:/cardFile.txt", "wb")
+        myFile.write(ja)
+
+        myFile.close()
+
+        myFile = open("D:/cardFile.txt", "rb")
+
+        jo = myFile.read()
+        myFile.close()
+
+        self.flop = pickle.loads(jo)
+
+        # self.flop = ""        
+        # try:
+        #     print("receiving flop")
+        #     self.flop = s.recv(1024)
+            
+        # except EOFError as error:
+        #     self.flop = pickle.loads(self.flop)
+        #     pass    
+
+        self.displayIMGNonCenter(self.flopLocation1, screen, self.flop[0].getImageAddress(), [100, 100])
+        self.displayIMGNonCenter(self.flopLocation2, screen, self.flop[1].getImageAddress(), [100, 100])
+        self.displayIMGNonCenter(self.flopLocation3, screen, self.flop[2].getImageAddress(), [100, 100])
 
 def displayText(text, location, screen, fontSize):
     TNRFont = pygame.font.SysFont("Crimson-Roman.ttf", fontSize)
@@ -228,9 +244,6 @@ def main():
         pygame.display.update()
     
     poker = Poker(screen)
-    # displayText("River", riverLocation1, screen)
-    # Card("King", "Clubs", "king_of_clubs.png").displayCardImage(riverLocation1, screen)
-    # poker.initializeGame(screen)
     poker.gameLoop(screen)
 main()
 

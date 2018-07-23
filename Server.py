@@ -13,6 +13,11 @@ host = socket.gethostbyname(socket.gethostname())
 s.bind((host,port))
 s.listen(5)
 connectors = []
+connPlayers = {}
+playersCards = {}
+flop = []
+turn = ""
+river = ""
 # global deck
 s.settimeout(10)
 while True:
@@ -28,25 +33,41 @@ while True:
         numPlayers = len(connectors)
         for x in range (numPlayers):
             connectors[x].send((str(numPlayers) + str(x+1)).encode())
+            # connPlayers[connectors[x]] = x+1
+            connPlayers.update({connectors[x] : x+1})
+            print(connPlayers[connectors[x]])
         break
 
 def giveHands():
-    # connectors[0].send(str(deck.getTopCard()).encode())
     for x in connectors:
-        serializedCard1 = pickle.dumps(deck.getTopCard())
-        serializedCard2 = pickle.dumps(deck.getTopCard())
-        x.send(serializedCard1)
-        s.settimeout(5)
-        while True:     
-            try: 
-                x.send(serializedCard2)
-            except socket.timeout as e:
-                break
+        card1 = deck.getTopCard()
+        card2 = deck.getTopCard()
+        playersCards.update({connPlayers[x] : [card1, card2]})
+        print(playersCards[connPlayers[x]])
+        serList = pickle.dumps(playersCards[connPlayers[x]])
+        while True:
+            x.sendall(serList)
+        s.close()
+
+# def askDecisions():
+#     for x in connectors:
+
+def showFlop():
+    for x in range(3):
+        flop.append(deck.getTopCard())
+
+    while True:
+        for x in connectors:
+            serList = pickle.dumps(flop)
+            x.sendall(serList)
+            break
                 
 def newRound():
     global deck
     deck = Deck()
     giveHands()
+    # askDecisions
+    showFlop()
 
 newRound()
         

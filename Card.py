@@ -26,7 +26,7 @@ class Card():
         pygame.display.flip()
 
     def __str__(self):
-        return self.cardValue + " of " + self.suitValue
+        return str(self.cardValue) + " of " + self.suitValue
 
 
     
