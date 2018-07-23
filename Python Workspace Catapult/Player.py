@@ -6,7 +6,7 @@ pygame.init()
 
 class Player():
     def __init__(self, n, amt, avLoc, tLoc):
-        self.amount = amt
+        self.amount = amt #the amount of money the player has
         self.avatarLoc = avLoc
         self.textLoc = tLoc
         self.name = n
@@ -32,5 +32,12 @@ class Player():
 
     def getName(self):
         return self.name
+    def bet(self,amount#the amount the player wants to b e t)
+        self.amount-=amount
+        pot=pot+amount
+    def disNiggaActuallyWon(self)
+        self.amount=pot+self.amount   
+        
+    
 
     

@@ -29,7 +29,36 @@ while True:
 numPlayers = len(connectors)
 for x in range (numPlayers):
     connectors[x].send(str(numPlayers).encode())
+
+def playerStanding():
+    
         
+def detectWin(q,w,e,r,t,y,u):
+    bards=[q,w,e,r,t,y,u]
+    RF=1
+    SF=2
+    FK=3
+    FH=4
+    F=5
+    S=6
+    TK=7
+    TP=8
+    P=9
+    H=10
+    for x in range(len(bards)):
+        for f in range(len(bards))
+            b=0
+            if(bards[x].getValue()==bards[f].getValue())
+            b=b+1
+
+
+
+
+
+
+    
+    
+
 print ("hello me gay")
 
 
