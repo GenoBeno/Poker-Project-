@@ -1,6 +1,8 @@
 import pygame
 import time
 import os
+from Card import Card
+from random import *
 
 pygame.init()
 
@@ -11,9 +13,11 @@ imageNames=['2_of_clubs.png','2_of_diamonds.png','2_of_hearts.png','2_of_spades.
        '10_of_spades.png','ace_of_clubs.png','ace_of_diamonds.png','ace_of_hearts.png','ace_of_spades.png','queen_of_clubs2.png','queen_of_diamonds2.png','queen_of_hearts2.png','queen_of_spades2.png','jack_of_clubs2.png','jack_of_diamonds2.png','jack_of_hearts2.png','jack_of_spades2.png','king_of_clubs2.png','king_of_diamonds2.png','king_of_hearts2.png','king_of_spades2.png']
 
 class Deck():
-    def __init__(self, screen):
-        self.window = screen
-        self.deck = shuffleDeck(createDeck())
+    # def __init__(self, screen):
+    #     self.window = screen
+    #     self.deck = shuffleDeck(createDeck())
+    def __init__(self):
+        self.deck = self.shuffleDeck(self.createDeck())
 
     def createDeck(self):
        i = 0
@@ -28,9 +32,9 @@ class Deck():
 
     def shuffleDeck(self, deck):
        shuffledDeck=[]
-       for i in range(0,len(u)):
-           n=randint(0,len(u)-1)
-           shuffledDeck.append(u[n])
+       for i in range(0,len(deck)):
+           n=randint(0,len(deck)-1)
+           shuffledDeck.append(deck[n])
        return shuffledDeck
 
     def getDeck(self):
@@ -39,7 +43,7 @@ class Deck():
     def getTopCard(self):
         return self.deck.pop()
 
-    
+
 
 
 

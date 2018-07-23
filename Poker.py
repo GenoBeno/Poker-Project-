@@ -1,7 +1,7 @@
 import pygame
 import time
 import os
-import socket
+import socket, pickle
 from Card import Card
 from Player import Player
 
@@ -9,28 +9,24 @@ pygame.init()
 pygame.font.init()
 clock = pygame.time.Clock()
 
-riverLocation1 = (0, 0)
-riverLocation2 = (0, 0)
-riverLocation3 = (0, 0)
-Turn1Location = (0, 0)
-Turn2Location = (0, 0)
-Hand1Location = (0, 0)
-Hand2Location = (0, 0)
 numPlayers = '0'
 playerNum = '0'
+s = socket.socket()
+port = 20000
+s.connect(('137.112.223.68', port)) #Maxwell is currently hosting
 
 player1, player2, player3, player4, player5 = "", "", "", "", ""
 
 
 class Poker():
     def __init__(self, screen):
-        riverLocation1 = (screen.get_width()/2, screen.get_height()/10)
-        riverLocation2 = (0, 0)
-        riverLocation3 = (0, 0)
-        Turn1Location = (0, 0)
-        Turn2Location = (0, 0)
-        Hand1Location = (0, 0)
-        Hand2Location = (0, 0)
+        self.flopLocation1 = [screen.get_width()-210,90,105,105]
+        self.flopLocation2 = [screen.get_width()-375,90,105,105]
+        self.flopLocation3 = [screen.get_width()-540,90,105,105]
+        self.turnLocation = [screen.get_width()-460, 280, 105, 105]
+        self.riverLocation = [screen.get_width()-280, 280, 105, 105]
+        self.Hand1Location = [screen.get_width()/2-120, screen.get_height()-120, 105, 105]
+        self.Hand2Location = [screen.get_width()/2+20, screen.get_height()-120, 105, 105]
 
     def displayImage(self, location, screen, imageAddress, size):
         image = pygame.image.load(os.path.join(imageAddress))
@@ -38,6 +34,12 @@ class Poker():
         imageRect = image.get_rect()
         imageRect.center = location
         screen.blit(image, imageRect)
+        pygame.display.flip()
+
+    def displayIMGNonCenter(self, location, screen, imageAddress, size):
+        image = pygame.image.load(os.path.join(imageAddress))
+        image = pygame.transform.scale(image.convert_alpha(), size)
+        screen.blit(image, location)
         pygame.display.flip()
 
     def initializeGame(self, screen):
@@ -56,13 +58,13 @@ class Poker():
             
 
             #Code to connect players
-            s = socket.socket()
-            port = 20000
-            s.connect(('137.112.223.68', port)) #Maxwell is currently hosting
+            # s = socket.socket()
+            # port = 20000
+            # s.connect(('137.112.223.68', port)) #Maxwell is currently hosting
             #'137.112.223.68' - Maxwell's IP
             #'137.112.224.150' - Dhiraj's IP
             string = int(s.recv(1024))
-
+            # s.close()
             playerNum = string % 10
             numPlayers = string // 10
             # numPlayers = string[:-2]
@@ -86,47 +88,32 @@ class Poker():
             # screen.fill((34, 139, 34))
 
             #Drawing rects for flop, turn, river, and hand
-            pygame.draw.rect(screen,(0,0,0),[screen.get_width()-210,90,105,105], 5)
-            pygame.draw.rect(screen,(0,0,0),[screen.get_width()-375,90,105,105], 5)
-            pygame.draw.rect(screen,(0,0,0),[screen.get_width()-540,90,105,105], 5)
+            
+            #Flop
+            pygame.draw.rect(screen,(0,0,0), self.flopLocation1, 5)
+            pygame.draw.rect(screen,(0,0,0), self.flopLocation2, 5)
+            pygame.draw.rect(screen,(0,0,0), self.flopLocation3, 5)
             displayText("Flop",[screen.get_width()-323,40],screen, 60)
             pygame.draw.line(screen, (255, 255, 255), (screen.get_width()-600, 75), (screen.get_width()-50, 75), 4)
 
-            pygame.draw.rect(screen, (0, 0, 0), [screen.get_width()-460, 280, 105, 105], 5)
-            pygame.draw.rect(screen, (0, 0, 0), [screen.get_width()-280, 280, 105, 105], 5)
+            #Turn and River           
+            pygame.draw.rect(screen, (0, 0, 0), self.turnLocation, 5)
+            pygame.draw.rect(screen, (0, 0, 0), self.riverLocation, 5)
             displayText("Turn", [screen.get_width()-410, 250], screen, 60)
 
             displayText("River", [screen.get_width()-230, 250], screen, 60)
 
-
-
-
-            
+            #Hand
+            pygame.draw.rect(screen, (0, 0, 0), self.Hand1Location, 5)
+            pygame.draw.rect(screen, (0, 0, 0), self.Hand2Location, 5)
+            displayText("Hand", [screen.get_width()/2, screen.get_height()-150], screen, 60)
 
             #Drawing player avatars
-            # player1 = Player("Player 1", 1000, (110, screen.get_height()/6), (130, screen.get_height()/6))
-            # player2 = Player("Player 2", 1000, (110, 2*screen.get_height()/6), (130, 2*screen.get_height()/6))
-            # player3 = Player("Player 3", 1000, (110, 3*screen.get_height()/6), (130, 3*screen.get_height()/6))
-            # player4 = Player("Player 4", 1000, (110, 4*screen.get_height()/6), (130, 4*screen.get_height()/6))
-            # player5 = Player("Player 5", 1000, (110, 5*screen.get_height()/6), (130, 5*screen.get_height()/6))
-
             player1 = Player("Player 1", 1000, screen)
             player2 = Player("Player 2", 1000, screen)
             player3 = Player("Player 3", 1000, screen)
             player4 = Player("Player 4", 1000, screen)
             player5 = Player("Player 5", 1000, screen)
-
-            player1Loc = (110, screen.get_height()/6)
-            player2Loc = (110, 2*screen.get_height()/6)
-            player3Loc = (110, 3*screen.get_height()/6)
-            player4Loc = (110, 4*screen.get_height()/6)
-            player5Loc = (110, 5*screen.get_height()/6)
-
-            player1TLoc = (130, screen.get_height()/6)
-            player2TLoc = (130, 2*screen.get_height()/6)
-            player3TLoc = (130, 3*screen.get_height()/6)
-            player4TLoc = (130, 4*screen.get_height()/6)
-            player5TLoc = (130, 5*screen.get_height()/6)
 
             players = [player1, player2, player3, player4, player5]
 
@@ -141,7 +128,7 @@ class Poker():
             # pygame.time.delay(5000)
             # print("rarded")
             # pygame.draw.rect(screen, (34, 139, 34), [screen.get_width()/2-500, screen.get_height()/2-100, 750, 300])
-            pygame.display.update()
+            # pygame.display.update()
 
             running = False
             
@@ -160,7 +147,7 @@ class Poker():
 
             #Start Round
 
-
+            self.newRound(screen)
 
 
 
@@ -171,8 +158,41 @@ class Poker():
             pygame.display.update()
             clock.tick(100)
 
-    # def newRound(self, screen):
+    def newRound(self, screen):
+        # variable = Card()
+        # self.card1 = pickle.Unpickler.load(Card)
+        # self.card2 = pickle.Unpickler.load(Card)
+        
+        self.card1 = ""
+        while True:
+            self.card1 = s.recv(1024)
+            self.card1 = pickle.loads(self.card1)
+            if not self.card1 == "":
+                print("got first card")
+                break
 
+        self.card2 = ""
+        
+        while True:
+            print("going thru second loop bois")
+            self.card2 = s.recv(1024)
+            print("received 2nd card")
+            self.card2 = pickle.loads(self.card2)
+            if not self.card2 == "":
+                print ("ha got second card")
+                break
+        # print("kmsasdf")
+        # self.card1 = str(s.recv(1024))
+        # print("kmslast")
+        
+        # print(str(self.card1))
+        # self.card2 = pickle.loads(s.recv(1024))
+        # print(self.card2)
+        self.displayIMGNonCenter(self.Hand1Location, screen, self.card1.getImageAddress(), [100, 100])
+        self.displayIMGNonCenter(self.Hand2Location, screen, self.card2.getImageAddress(), [100, 100])
+        
+        # self.card1.displayCardImage([screen.get_width()/2, screen.get_height()/2], screen)
+        # self.card2.displayCardImage([screen.get_width()/2, screen.get_height()/2], screen)
 
 def displayText(text, location, screen, fontSize):
     TNRFont = pygame.font.SysFont("Crimson-Roman.ttf", fontSize)

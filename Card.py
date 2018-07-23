@@ -16,7 +16,7 @@ class Card():
     def getSuitValue(self):
         return self.suitValue
 
-    def getImageAddress():
+    def getImageAddress(self):
         return self.imageAddress
 
     def displayCardImage(self, location, screen):
@@ -24,6 +24,9 @@ class Card():
         image = pygame.transform.scale(image.convert_alpha(), (100, 100))
         screen.blit(image, location)
         pygame.display.flip()
+
+    def __str__(self):
+        return self.cardValue + " of " + self.suitValue
 
 
     

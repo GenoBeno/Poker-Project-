@@ -1,22 +1,19 @@
 import pygame
 import time
-import socket
+import socket, pickle
+from Deck import Deck
+from Card import Card
 # import Player from Player
 
 pygame.init()
 
-s = socket.socket()
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 port = 20000
 host = socket.gethostbyname(socket.gethostname())
 s.bind((host,port))
 s.listen(5)
 connectors = []
-players = []
-
-# def giveHands():
-#     for x in connectors:
-
-
+# global deck
 s.settimeout(10)
 while True:
     try:
@@ -33,8 +30,25 @@ while True:
             connectors[x].send((str(numPlayers) + str(x+1)).encode())
         break
 
+def giveHands():
+    # connectors[0].send(str(deck.getTopCard()).encode())
+    for x in connectors:
+        serializedCard1 = pickle.dumps(deck.getTopCard())
+        serializedCard2 = pickle.dumps(deck.getTopCard())
+        x.send(serializedCard1)
+        s.settimeout(5)
+        while True:     
+            try: 
+                x.send(serializedCard2)
+            except socket.timeout as e:
+                break
+                
+def newRound():
+    global deck
+    deck = Deck()
+    giveHands()
 
-    # connectors[x].send(str(int(x+1)).encode())
+newRound()
         
 
 
