@@ -45,9 +45,10 @@ def giveHands():
         playersCards.update({connPlayers[x] : [card1, card2]})
         print(playersCards[connPlayers[x]])
         serList = pickle.dumps(playersCards[connPlayers[x]])
-        while True:
-            x.sendall(serList)
+        # while True:
+        x.sendall(serList)
         s.close()
+        x.close()
 
 # def askDecisions():
 #     for x in connectors:
@@ -55,12 +56,18 @@ def giveHands():
 def showFlop():
     for x in range(3):
         flop.append(deck.getTopCard())
+    print("Flop: " + str(flop))
 
-    while True:
-        for x in connectors:
-            serList = pickle.dumps(flop)
-            x.sendall(serList)
-            break
+    for n in connectors:
+        serList = pickle.dumps(flop)
+        print("sending flop")
+        n.sendall(serList)
+
+def showTurn():
+    for x in connectors:
+        serCard = pickle.dumps(deck.getTopCard())
+        x.send(serCard)
+            
                 
 def newRound():
     global deck
@@ -68,6 +75,7 @@ def newRound():
     giveHands()
     # askDecisions
     showFlop()
+    # showTurn()
 
 newRound()
         

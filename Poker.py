@@ -183,32 +183,39 @@ class Poker():
         self.displayIMGNonCenter(self.Hand2Location, screen, self.card2.getImageAddress(), [100, 100])
         sleep(1)
 
-        ja = s.recv(4000000)
+        # ja = s.recv(4000000)
 
-        myFile = open("D:/cardFile.txt", "wb")
-        myFile.write(ja)
+        # myFile = open("D:/cardFile.txt", "wb")
+        # myFile.write(ja)
 
-        myFile.close()
+        # myFile.close()
 
-        myFile = open("D:/cardFile.txt", "rb")
+        # myFile = open("D:/cardFile.txt", "rb")
 
-        jo = myFile.read()
-        myFile.close()
+        # jo = myFile.read()
+        # myFile.close()
 
-        self.flop = pickle.loads(jo)
+        # self.flop = pickle.loads(jo)
 
-        # self.flop = ""        
+        self.flop = ""        
         # try:
-        #     print("receiving flop")
-        #     self.flop = s.recv(1024)
-            
+        print("receiving flop")
+        self.flop = s.recv(4096)
+        print("received flop")
         # except EOFError as error:
-        #     self.flop = pickle.loads(self.flop)
-        #     pass    
+        self.flop = pickle.loads(self.flop)
+            # pass    
 
         self.displayIMGNonCenter(self.flopLocation1, screen, self.flop[0].getImageAddress(), [100, 100])
         self.displayIMGNonCenter(self.flopLocation2, screen, self.flop[1].getImageAddress(), [100, 100])
         self.displayIMGNonCenter(self.flopLocation3, screen, self.flop[2].getImageAddress(), [100, 100])
+
+        # sleep(1)
+
+        # self.turn = s.recv(2048)
+        # self.turn = pickle.loads(self.turn)
+        # self.displayIMGNonCenter(self.turnLocation, screen, self.turn.getImageAddress(), [100, 100])
+        
 
 def displayText(text, location, screen, fontSize):
     TNRFont = pygame.font.SysFont("Crimson-Roman.ttf", fontSize)
