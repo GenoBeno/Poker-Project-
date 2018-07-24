@@ -1,6 +1,7 @@
 import pygame
 import time
 import socket
+from ServerTurnActions import *
 
 pygame.init()
 
@@ -17,7 +18,7 @@ s.settimeout(10)
 while True:
     try:
         c, addr = s.accept()
-        print('got cnection from', addr)
+        print('got connection from', addr)
 
         # c.send('Tank you for connecting with your friendly neighborhood spiderman'.encode())
         # message = (c.recv(1024))
@@ -29,7 +30,8 @@ while True:
 numPlayers = len(connectors)
 for x in range (numPlayers):
     connectors[x].send(str(numPlayers).encode())
-        
-print ("hello me gay")
 
+clientLog = c.recv(1024)
+if clientLog:
+    Decider()
 

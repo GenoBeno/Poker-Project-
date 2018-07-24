@@ -4,6 +4,7 @@ import pygame
 import os
 from Card import Card
 from Player import Player
+from ServerTurnActions import *
 from pygame.locals import *
 
 
@@ -466,8 +467,16 @@ class Poker():
                 if message == (b'firstup'):
                     print('try')
                     firstturn()
-                    break
-                if message == (b'next'):
+                elif message == (b'2nd'):
+                    middleturn()
+                    print('middleturndone')
+                elif message == (b'3rd'):
+                    middleturn()
+                    print('middleturndone')
+                elif message == (b'4th'):
+                    middleturn()
+                    print('middleturndone')
+                elif message == (b'5th'):
                     middleturn()
                     print('middleturndone')
             clock.tick(100)
