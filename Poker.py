@@ -161,7 +161,7 @@ class Poker():
     def newRound(self, screen):
         self.cards = ""
         while True:
-            self.cards = s.recv(1024)
+            self.cards = s.recv(4096)
             self.cards = pickle.loads(self.cards)
             if not self.cards == "":
                 break
@@ -183,24 +183,10 @@ class Poker():
         self.displayIMGNonCenter(self.Hand2Location, screen, self.card2.getImageAddress(), [100, 100])
         sleep(1)
 
-        # ja = s.recv(4000000)
-
-        # myFile = open("D:/cardFile.txt", "wb")
-        # myFile.write(ja)
-
-        # myFile.close()
-
-        # myFile = open("D:/cardFile.txt", "rb")
-
-        # jo = myFile.read()
-        # myFile.close()
-
-        # self.flop = pickle.loads(jo)
-
         self.flop = ""        
         # try:
         print("receiving flop")
-        self.flop = s.recv(4096)
+        self.flop = s.recv(8192)
         print("received flop")
         # except EOFError as error:
         self.flop = pickle.loads(self.flop)
@@ -212,9 +198,13 @@ class Poker():
 
         # sleep(1)
 
-        # self.turn = s.recv(2048)
-        # self.turn = pickle.loads(self.turn)
-        # self.displayIMGNonCenter(self.turnLocation, screen, self.turn.getImageAddress(), [100, 100])
+        self.turn = s.recv(2048)
+        self.turn = pickle.loads(self.turn)
+        self.displayIMGNonCenter(self.turnLocation, screen, self.turn.getImageAddress(), [100, 100])
+
+        self.river = s.recv(2048)
+        self.river = pickle.loads(self.river)
+        self.displayIMGNonCenter(self.riverLocation, screen, self.river.getImageAddress(), [100, 100])
         
 
 def displayText(text, location, screen, fontSize):

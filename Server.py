@@ -1,5 +1,5 @@
 import pygame
-import time
+from time import * 
 import socket, pickle
 from Deck import Deck
 from Card import Card
@@ -46,9 +46,8 @@ def giveHands():
         print(playersCards[connPlayers[x]])
         serList = pickle.dumps(playersCards[connPlayers[x]])
         # while True:
-        x.sendall(serList)
-        s.close()
-        x.close()
+        x.send(serList)
+        sleep(3)
 
 # def askDecisions():
 #     for x in connectors:
@@ -63,10 +62,18 @@ def showFlop():
         print("sending flop")
         n.sendall(serList)
 
+    sleep(3)
+
 def showTurn():
     for x in connectors:
         serCard = pickle.dumps(deck.getTopCard())
-        x.send(serCard)
+        x.sendall(serCard)
+        sleep(1)
+
+def showRiver():
+    for x in connectors:
+        serCard = pickle.dumps(deck.getTopCard())
+        x.sendall(serCard)
             
                 
 def newRound():
@@ -75,7 +82,8 @@ def newRound():
     giveHands()
     # askDecisions
     showFlop()
-    # showTurn()
+    showTurn()
+    showRiver()
 
 newRound()
         
