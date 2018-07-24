@@ -16,7 +16,7 @@ class Card():
     def getSuitValue(self):
         return self.suitValue
 
-    def getImageAddress():
+    def getImageAddress(self):
         return self.imageAddress
 
     def displayCardImage(self, location, screen):
