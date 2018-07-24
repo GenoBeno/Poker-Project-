@@ -31,7 +31,4 @@ numPlayers = len(connectors)
 for x in range (numPlayers):
     connectors[x].send(str(numPlayers).encode())
 
-clientLog = c.recv(1024)
-if clientLog:
-    Decider()
-
+#
